@@ -15,6 +15,7 @@ const errorMessage = {
   userExist: 'User already registered',
   tokenNotFound: 'Token not found',
   tokenExpired: 'Expired or invalid token',
+  userNotExist: 'User does not exist',
 };
 
 const jwtConfig = {

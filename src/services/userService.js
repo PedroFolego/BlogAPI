@@ -8,8 +8,14 @@ const findUserService = async () => User.findAll({
   attributes: { exclude: ['password'] },
 });
 
+const findByIdService = async (id) => User.findOne({ 
+  where: { id },
+  attributes: { exclude: ['password'] },
+});
+
 module.exports = {
   findUser,
   createUserService,
   findUserService,
+  findByIdService,
 };

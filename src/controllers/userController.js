@@ -1,7 +1,12 @@
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
 const schemaUser = require('../schemas/user');
-const { findUser, createUserService, findUserService } = require('../services/userService');
+const {
+  findUser,
+  createUserService,
+  findUserService,
+  findByIdService,
+} = require('../services/userService');
 const {
   BAD_REQUEST_STATUS,
   CREATED_STATUS,
@@ -9,6 +14,7 @@ const {
   jwtConfig,
   errorMessage,
   OK_STATUS,
+  NOT_FOUND_STATUS,
 } = require('../utils/constants');
 const { statusMessage } = require('../utils/functions');
 
@@ -19,7 +25,7 @@ const createUser = async (req, res) => {
   return res.status(CREATED_STATUS).json({ token });
 };
 
-const validateNewUser = async (req, res, next) => {
+const validateNewUser = async (req, _res, next) => {
   const { displayName, email, password } = req.body;
   const { error } = schemaUser.validate({ displayName, email, password });
   if (error) return next(statusMessage(BAD_REQUEST_STATUS, error.message));
@@ -27,13 +33,21 @@ const validateNewUser = async (req, res, next) => {
   next();
 };
 
-const findUsers = async (req, res) => {
+const findUsers = async (_req, res) => {
   const users = await findUserService();
   return res.status(OK_STATUS).json(users);
+};
+
+const findById = async (req, res, next) => {
+  const { id } = req.params;
+  const user = await findByIdService(id);
+  if (!user) return next(statusMessage(NOT_FOUND_STATUS, errorMessage.userNotExist));
+  return res.status(OK_STATUS).json(user);
 };
 
 module.exports = {
   createUser,
   validateNewUser,
   findUsers,
+  findById,
 };
