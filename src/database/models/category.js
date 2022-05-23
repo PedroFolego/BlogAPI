@@ -7,10 +7,5 @@ module.exports = (sequelize, DataTypes) => {
     tableName: 'Categories'
   });
 
-  // User.associate = (models) => {
-  //   User.hasMany(models.,
-  //     { foreignKey: '', as: '' });
-  // };
-
   return Category;
 };
