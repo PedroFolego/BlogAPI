@@ -1,6 +1,6 @@
 const schemaCategory = require('../schemas/category');
-const { addCategory } = require('../services/categoryService');
-const { CREATED_STATUS, BAD_REQUEST_STATUS } = require('../utils/constants');
+const { addCategory, getCategories } = require('../services/categoryService');
+const { CREATED_STATUS, BAD_REQUEST_STATUS, OK_STATUS } = require('../utils/constants');
 const { statusMessage } = require('../utils/functions');
 
 const createCategory = async (req, res) => {
@@ -16,7 +16,13 @@ const validateCategory = (req, _res, next) => {
   next();
 };
 
+const getAllCategories = async (req, res) => {
+  const categories = await getCategories();
+  return res.status(OK_STATUS).json(categories);
+};
+
 module.exports = {
   createCategory,
   validateCategory,
+  getAllCategories,
 };
