@@ -13,6 +13,8 @@ const errorMessage = {
   missingFields: 'Some required fields are missing',
   invalidFields: 'Invalid fields',
   userExist: 'User already registered',
+  tokenNotFound: 'Token not found',
+  tokenExpired: 'Expired or invalid token',
 };
 
 const jwtConfig = {

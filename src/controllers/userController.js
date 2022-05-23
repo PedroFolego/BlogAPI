@@ -1,13 +1,14 @@
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
 const schemaUser = require('../schemas/user');
-const { findUser, createUserService } = require('../services/userService');
+const { findUser, createUserService, findUserService } = require('../services/userService');
 const {
   BAD_REQUEST_STATUS,
   CREATED_STATUS,
   CONFLICT_STATUS,
   jwtConfig,
   errorMessage,
+  OK_STATUS,
 } = require('../utils/constants');
 const { statusMessage } = require('../utils/functions');
 
@@ -26,7 +27,13 @@ const validateNewUser = async (req, res, next) => {
   next();
 };
 
+const findUsers = async (req, res) => {
+  const users = await findUserService();
+  return res.status(OK_STATUS).json(users);
+};
+
 module.exports = {
   createUser,
   validateNewUser,
+  findUsers,
 };
