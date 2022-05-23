@@ -1,6 +1,6 @@
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
-const { findUser } = require('../services.js/loginService');
+const { findUser } = require('../services/loginService');
 const { BAD_REQUEST_STATUS, errorMessage, jwtConfig, OK_STATUS } = require('../utils/constants');
 const { statusMessage } = require('../utils/functions');
 
@@ -9,7 +9,6 @@ const validateLogin = async (req, res, next) => {
   if (!email || !password) {
     return next(statusMessage(BAD_REQUEST_STATUS, errorMessage.missingFields));
   }
-    console.log(email);
   if (!await findUser(email, password)) {
     return next(statusMessage(BAD_REQUEST_STATUS, errorMessage.invalidFields));
   }

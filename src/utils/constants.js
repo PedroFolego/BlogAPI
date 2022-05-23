@@ -12,6 +12,7 @@ const errorMessage = {
   serverError: 'Internal Server Error',
   missingFields: 'Some required fields are missing',
   invalidFields: 'Invalid fields',
+  userExist: 'User already registered',
 };
 
 const jwtConfig = {
