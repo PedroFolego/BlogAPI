@@ -21,8 +21,26 @@ const createPostService = async ({ title, content, userId, categoryIds }) => {
   return post;
 };
 
+const getPostsService = async () => {
+  const posts = await BlogPost.findAll({
+    include: [{
+      as: 'user',
+      model: User,
+      attributes: { exclude: ['password'] },
+    },
+    {
+      as: 'categories',
+      model: Category,
+      through: { attributes: [] },
+    }],
+  });
+  posts.forEach(({ dataValues }) => console.log(dataValues));
+  return posts;
+};
+
 module.exports = {
   findCategoryIdService,
   getIdFromToken,
   createPostService,
+  getPostsService,
 };

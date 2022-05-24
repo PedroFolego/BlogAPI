@@ -8,4 +8,7 @@ postRouter.post('/', tokenValidate,
   postController.validatePost,
   postController.createPost);
 
+postRouter.get('/', tokenValidate,
+  postController.getPosts);
+
 module.exports = postRouter;
