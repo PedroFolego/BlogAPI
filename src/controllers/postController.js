@@ -1,7 +1,7 @@
-require('dotenv').config();
-const jwt = require('jsonwebtoken');
 const schemaPost = require('../schemas/post');
-const { findCategoryIdService } = require('../services/postService');
+const {
+  findCategoryIdService, getIdFromToken, createPostService,
+} = require('../services/postService');
 const { BAD_REQUEST_STATUS, errorMessage, CREATED_STATUS } = require('../utils/constants');
 const { statusMessage } = require('../utils/functions');
 
@@ -15,17 +15,13 @@ const validatePost = async (req, res, next) => {
   next();
 };
 
-const getIdFromAuthrization = (token) => {
-  const data = jwt.validate(token, process.env.JWT_SECRET);
-  
-};
-
 const createPost = async (req, res) => {
   const { title, content, categoryIds } = req.body;
   const token = req.headers.authorization;
+  const userId = await getIdFromToken(token);
+  const post = await createPostService({ title, content, userId, categoryIds });
 
-  const { id, published, updated } = await createPostService({ title, content, categoryIds });
-  return res.status(CREATED_STATUS).json({ id, title, content, updated, published });
+  return res.status(CREATED_STATUS).json(post);
 };
 
 module.exports = {

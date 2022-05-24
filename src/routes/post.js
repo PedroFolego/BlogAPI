@@ -5,6 +5,7 @@ const tokenValidate = require('../middlewares/tokenValidation');
 const postRouter = express.Router();
 
 postRouter.post('/', tokenValidate,
-  postController.validatePost);
+  postController.validatePost,
+  postController.createPost);
 
 module.exports = postRouter;
