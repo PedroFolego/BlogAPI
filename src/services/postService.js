@@ -12,7 +12,7 @@ const getIdFromToken = async (token) => {
   const findUser = await User.findOne({ where: { email: data } });
   return findUser.id;
 };
-  
+
 const createPostService = async ({ title, content, userId, categoryIds }) => {
   const post = await BlogPost.create({ title, content, userId });
   await categoryIds.forEach(
@@ -27,8 +27,7 @@ const getPostsService = async () => {
       as: 'user',
       model: User,
       attributes: { exclude: ['password'] },
-    },
-    {
+    }, {
       as: 'categories',
       model: Category,
       through: { attributes: [] },
@@ -43,8 +42,7 @@ const getPostIdService = async (id) => {
       as: 'user',
       model: User,
       attributes: { exclude: ['password'] },
-    },
-    {
+    }, {
       as: 'categories',
       model: Category,
       through: { attributes: [] },
@@ -53,10 +51,31 @@ const getPostIdService = async (id) => {
   return posts;
 };
 
+const updatePostService = async ({ id, title, content }) => {
+  const post = await BlogPost.findOne({
+    where: { id },
+    include: [{
+      as: 'user',
+      model: User,
+      attributes: { exclude: ['password'] },
+    }, {
+      as: 'categories',
+      model: Category,
+      through: { attributes: [] },
+    }],
+  });
+  await post.update({ title, content, updated: new Date() });
+  return post;
+};
+
+const validateUserPost = ({ id, userId }) => BlogPost.findOne({ where: { userId, id } });
+
 module.exports = {
   findCategoryIdService,
   getIdFromToken,
   createPostService,
   getPostsService,
   getPostIdService,
+  updatePostService,
+  validateUserPost,
 };

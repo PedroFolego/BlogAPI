@@ -1,22 +1,26 @@
-const schemaPost = require('../schemas/post');
+const { schemaPostCreate, schemaPostUpdate } = require('../schemas/post');
 const {
   findCategoryIdService, 
   getIdFromToken, 
   createPostService, 
   getPostsService,
   getPostIdService,
+  updatePostService,
+  validateUserPost,
 } = require('../services/postService');
 const {
   errorMessage,
   BAD_REQUEST_STATUS,
   CREATED_STATUS, 
   OK_STATUS, 
-  NOT_FOUND_STATUS} = require('../utils/constants');
+  NOT_FOUND_STATUS,
+  UNAUTHORIZED_STATUS,
+} = require('../utils/constants');
 const { statusMessage } = require('../utils/functions');
 
 const validatePost = async (req, _res, next) => {
   const { title, content, categoryIds } = req.body;
-  const { error } = schemaPost.validate({ title, content, categoryIds });
+  const { error } = schemaPostCreate.validate({ title, content, categoryIds });
   if (error) return next(statusMessage(BAD_REQUEST_STATUS, errorMessage.missingFields));
 
   const categoryId = await findCategoryIdService(categoryIds);
@@ -33,7 +37,7 @@ const createPost = async (req, res) => {
   return res.status(CREATED_STATUS).json(post);
 };
 
-const getPosts = async (req, res) => {
+const getPosts = async (_req, res) => {
   const posts = await getPostsService();
   return res.status(OK_STATUS).json(posts);
 };
@@ -46,9 +50,36 @@ const getPostId = async (req, res, next) => {
   return res.status(OK_STATUS).json(postsId);
 };
 
+const updatePost = async (req, res) => {
+  const { title, content } = req.body;
+  const { id } = req.params;
+  const post = await updatePostService({ id, title, content });
+
+  return res.status(OK_STATUS).json(post);
+};
+
+const validateIdUser = async (req, _res, next) => {
+  const { id } = req.params;
+  const token = req.headers.authorization;
+  const userId = await getIdFromToken(token);
+  const validate = await validateUserPost({ id, userId });
+  if (!validate) return next(statusMessage(UNAUTHORIZED_STATUS, errorMessage.unathorizeduser));
+  next();
+};
+
+const validateBodyUpdate = async (req, _res, next) => {
+  const { title, content } = req.body;
+  const { error } = schemaPostUpdate.validate({ title, content });
+  if (error) return next(statusMessage(BAD_REQUEST_STATUS, errorMessage.missingFields));
+  next();
+};
+
 module.exports = {
   validatePost,
   createPost,
   getPosts,
   getPostId,
+  updatePost,
+  validateBodyUpdate,
+  validateIdUser,
 };

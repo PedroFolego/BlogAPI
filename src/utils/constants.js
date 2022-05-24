@@ -18,6 +18,7 @@ const errorMessage = {
   userNotExist: 'User does not exist',
   categoryIdNotFound: '"categoryIds" not found',
   postNotExist: 'Post does not exist',
+  unathorizeduser: 'Unauthorized user',
 };
 
 const jwtConfig = {
