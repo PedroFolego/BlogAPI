@@ -4,12 +4,14 @@ const {
   getIdFromToken, 
   createPostService, 
   getPostsService,
+  getPostIdService,
 } = require('../services/postService');
 const {
   errorMessage,
   BAD_REQUEST_STATUS,
   CREATED_STATUS, 
-  OK_STATUS } = require('../utils/constants');
+  OK_STATUS, 
+  NOT_FOUND_STATUS} = require('../utils/constants');
 const { statusMessage } = require('../utils/functions');
 
 const validatePost = async (req, _res, next) => {
@@ -36,8 +38,17 @@ const getPosts = async (req, res) => {
   return res.status(OK_STATUS).json(posts);
 };
 
+const getPostId = async (req, res, next) => {
+  const { id } = req.params;
+  const postsId = await getPostIdService(id);
+  if (!postsId) return next(statusMessage(NOT_FOUND_STATUS, errorMessage.postNotExist));
+
+  return res.status(OK_STATUS).json(postsId);
+};
+
 module.exports = {
   validatePost,
   createPost,
   getPosts,
+  getPostId,
 };

@@ -34,7 +34,22 @@ const getPostsService = async () => {
       through: { attributes: [] },
     }],
   });
-  posts.forEach(({ dataValues }) => console.log(dataValues));
+  return posts;
+};
+
+const getPostIdService = async (id) => {
+  const posts = await BlogPost.findByPk(id, {
+    include: [{
+      as: 'user',
+      model: User,
+      attributes: { exclude: ['password'] },
+    },
+    {
+      as: 'categories',
+      model: Category,
+      through: { attributes: [] },
+    }],
+  });
   return posts;
 };
 
@@ -43,4 +58,5 @@ module.exports = {
   getIdFromToken,
   createPostService,
   getPostsService,
+  getPostIdService,
 };

@@ -11,4 +11,7 @@ postRouter.post('/', tokenValidate,
 postRouter.get('/', tokenValidate,
   postController.getPosts);
 
+postRouter.get('/:id', tokenValidate,
+  postController.getPostId);
+
 module.exports = postRouter;

@@ -17,6 +17,7 @@ const errorMessage = {
   tokenExpired: 'Expired or invalid token',
   userNotExist: 'User does not exist',
   categoryIdNotFound: '"categoryIds" not found',
+  postNotExist: 'Post does not exist',
 };
 
 const jwtConfig = {
