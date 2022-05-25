@@ -1,6 +1,18 @@
 const { Op } = require('sequelize');
 const { Category, User, BlogPost, PostCategory } = require('../database/models');
 
+const includeTable = {
+  include: [{
+    as: 'user',
+    model: User,
+    attributes: { exclude: ['password'] },
+  }, {
+    as: 'categories',
+    model: Category,
+    through: { attributes: [] },
+  }],
+};
+
 const findCategoryIdService = async (categoryIds) => 
   Category.findOne({ where: { id: categoryIds } });
 
@@ -13,47 +25,19 @@ const createPostService = async ({ title, content, userId, categoryIds }) => {
 };
 
 const getPostsService = async () => {
-  const posts = await BlogPost.findAll({
-    include: [{
-      as: 'user',
-      model: User,
-      attributes: { exclude: ['password'] },
-    }, {
-      as: 'categories',
-      model: Category,
-      through: { attributes: [] },
-    }],
-  });
+  const posts = await BlogPost.findAll(includeTable);
   return posts;
 };
 
 const getPostIdService = async (id) => {
-  const posts = await BlogPost.findByPk(id, {
-    include: [{
-      as: 'user',
-      model: User,
-      attributes: { exclude: ['password'] },
-    }, {
-      as: 'categories',
-      model: Category,
-      through: { attributes: [] },
-    }],
-  });
+  const posts = await BlogPost.findByPk(id, includeTable);
   return posts;
 };
 
 const updatePostService = async ({ id, title, content }) => {
   const post = await BlogPost.findOne({
     where: { id },
-    include: [{
-      as: 'user',
-      model: User,
-      attributes: { exclude: ['password'] },
-    }, {
-      as: 'categories',
-      model: Category,
-      through: { attributes: [] },
-    }],
+    ...includeTable,
   });
   await post.update({ title, content, updated: new Date() });
   return post;
@@ -66,15 +50,7 @@ const destroyPost = async ({ id }) => BlogPost.destroy({ where: { id } });
 const getAllPostsLike = async (params) => {
   const query = `%${params}%`;
   const posts = await BlogPost.findAll({
-    include: [{
-      as: 'user',
-      model: User,
-      attributes: { exclude: ['password'] },
-    }, {
-      as: 'categories',
-      model: Category,
-      through: { attributes: [] },
-    }],
+    ...includeTable,
     where: { [Op.or]: [
       { title: { [Op.like]: query } },
       { content: { [Op.like]: query } },
