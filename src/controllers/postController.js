@@ -7,6 +7,7 @@ const {
   getPostIdService,
   updatePostService,
   validateUserPost,
+  destroyPost,
 } = require('../services/postService');
 const {
   errorMessage,
@@ -15,6 +16,7 @@ const {
   OK_STATUS, 
   NOT_FOUND_STATUS,
   UNAUTHORIZED_STATUS,
+  NO_CONTENT_STATUS,
 } = require('../utils/constants');
 const { statusMessage } = require('../utils/functions');
 
@@ -74,6 +76,19 @@ const validateBodyUpdate = async (req, _res, next) => {
   next();
 };
 
+const validatePostId = async (req, _res, next) => {
+  const { id } = req.params;
+  const postsId = await getPostIdService(id);
+  if (!postsId) return next(statusMessage(NOT_FOUND_STATUS, errorMessage.postNotExist));
+  next();
+};
+
+const deletePost = async (req, res) => {
+  const { id } = req.params;
+  await destroyPost({ id });
+  return res.status(NO_CONTENT_STATUS).end();
+};
+
 module.exports = {
   validatePost,
   createPost,
@@ -82,4 +97,6 @@ module.exports = {
   updatePost,
   validateBodyUpdate,
   validateIdUser,
+  deletePost,
+  validatePostId,
 };

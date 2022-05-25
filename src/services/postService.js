@@ -1,7 +1,5 @@
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
-// const Sequelize = require('sequelize');
-// const config = require('../database/config/config');
 const { Category, User, BlogPost, PostCategory } = require('../database/models');
 
 const findCategoryIdService = async (categoryIds) => 
@@ -70,6 +68,8 @@ const updatePostService = async ({ id, title, content }) => {
 
 const validateUserPost = ({ id, userId }) => BlogPost.findOne({ where: { userId, id } });
 
+const destroyPost = async ({ id }) => BlogPost.destroy({ where: { id } });
+
 module.exports = {
   findCategoryIdService,
   getIdFromToken,
@@ -78,4 +78,5 @@ module.exports = {
   getPostIdService,
   updatePostService,
   validateUserPost,
+  destroyPost,
 };
