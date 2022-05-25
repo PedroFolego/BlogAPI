@@ -5,7 +5,9 @@ const {
   findUser,
   createUserService,
   findUserService,
+  getIdFromToken,
   findByIdService,
+  deleteUser,
 } = require('../services/userService');
 const {
   BAD_REQUEST_STATUS,
@@ -15,6 +17,7 @@ const {
   errorMessage,
   OK_STATUS,
   NOT_FOUND_STATUS,
+  NO_CONTENT_STATUS,
 } = require('../utils/constants');
 const { statusMessage } = require('../utils/functions');
 
@@ -45,9 +48,17 @@ const findById = async (req, res, next) => {
   return res.status(OK_STATUS).json(user);
 };
 
+const deleteMe = async (req, res) => {
+  const token = req.headers.authorization;
+  const id = await getIdFromToken(token);
+  await deleteUser(id);
+  return res.status(NO_CONTENT_STATUS).end();
+};
+ 
 module.exports = {
   createUser,
   validateNewUser,
   findUsers,
   findById,
+  deleteMe,
 };

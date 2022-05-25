@@ -1,7 +1,6 @@
 const { schemaPostCreate, schemaPostUpdate } = require('../schemas/post');
 const {
   findCategoryIdService, 
-  getIdFromToken, 
   createPostService, 
   getPostsService,
   getPostIdService,
@@ -9,6 +8,9 @@ const {
   validateUserPost,
   destroyPost,
 } = require('../services/postService');
+const { 
+    getIdFromToken, 
+  } = require('../services/userService');
 const {
   errorMessage,
   BAD_REQUEST_STATUS,

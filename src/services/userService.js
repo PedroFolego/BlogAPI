@@ -1,4 +1,12 @@
+require('dotenv').config();
+const jwt = require('jsonwebtoken');
 const { User } = require('../database/models');
+
+const getIdFromToken = async (token) => {
+  const { data } = jwt.verify(token, process.env.JWT_SECRET);
+  const findUser = await User.findOne({ where: { email: data } });
+  return findUser.id;
+};
 
 const createUserService = async (body) => User.create({ ...body });
 
@@ -13,9 +21,15 @@ const findByIdService = async (id) => User.findOne({
   attributes: { exclude: ['password'] },
 });
 
+const deleteUser = async (id) => {
+  const ee = await User.destroy({ where: { id } }); console.log(ee);
+};
+
 module.exports = {
   findUser,
   createUserService,
   findUserService,
   findByIdService,
+  getIdFromToken,
+  deleteUser,
 };
