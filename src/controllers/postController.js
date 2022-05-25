@@ -7,6 +7,7 @@ const {
   updatePostService,
   validateUserPost,
   destroyPost,
+  getAllPostsLike,
 } = require('../services/postService');
 const { 
     getIdFromToken, 
@@ -91,6 +92,12 @@ const deletePost = async (req, res) => {
   return res.status(NO_CONTENT_STATUS).end();
 };
 
+const getAllPostsQuery = async (req, res) => {
+  const { q } = req.query;
+  const posts = await getAllPostsLike(q);
+  return res.status(OK_STATUS).json(posts);
+};
+
 module.exports = {
   validatePost,
   createPost,
@@ -101,4 +108,5 @@ module.exports = {
   validateIdUser,
   deletePost,
   validatePostId,
+  getAllPostsQuery,
 };

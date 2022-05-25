@@ -21,9 +21,7 @@ const findByIdService = async (id) => User.findOne({
   attributes: { exclude: ['password'] },
 });
 
-const deleteUser = async (id) => {
-  const ee = await User.destroy({ where: { id } }); console.log(ee);
-};
+const deleteUser = async (id) => User.destroy({ where: { id } });
 
 module.exports = {
   findUser,
