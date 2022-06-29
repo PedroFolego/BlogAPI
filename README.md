@@ -1,17 +1,36 @@
 
-# POO RPG
+# Blog API
 
 
 # Contexto
-Projeto aplicando os princípios da arquitetura SOLID e os princípios de POO em uma estrutura de jogos de interpretação de papéis, mais conhecidos como jogos RPG (Role Playing Game).
+API e um banco de dados para a produção de conteúdo para um blog!
+
+Usando as camadas da aplicação (Models, Service e Controllers),
+sendo possível realizar as operações que se pode fazer em um banco de dados: (CRUD)Criação, Leitura, Atualização e Exclusão.
 
 ## Técnologias usadas
 
-> Desenvolvido usando: NodeJS, POO, SOLID, ES6, TypeScript
+> Desenvolvido usando: NodeJS, ExpressJS, Sequelize, ES6, JWT authentication
 
 ## Instalando Dependências
 
   ```bash
-  cd POO-RPG/ 
+  cd BlogAPI/ 
   npm install
   ``` 
+
+## Executando Sequelize
+
+* Para executar o sequelize:
+
+  ```
+  npm run prestart
+  ```
+
+## Executando aplicação
+
+* Para rodar o back-end:
+
+  ```
+  npm start
+  ```
